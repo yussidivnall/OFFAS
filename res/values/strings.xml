@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, WiiActivity!</string>
+    <string name="app_name">wii interface</string>
+    <string name="local_host">127.0.0.1</string>
+    <string name="port">234</string>
+    <string name="start">connect</string>
+    <string name="stop">disconnect</string>
+</resources>

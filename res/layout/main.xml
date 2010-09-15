@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="@string/hello"
+    />
+<EditText android:text="@string/local_host" android:id="@+id/AddressEditText" android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
+<EditText android:text="@string/port" android:id="@+id/PortEditText" android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
+
+<Button android:text="@string/start" android:id="@+id/ConnectButton" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+<Button android:text="@string/stop" android:id="@+id/DisconnectButton" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+</LinearLayout>
