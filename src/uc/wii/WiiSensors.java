@@ -94,6 +94,10 @@ public class WiiSensors implements SensorEventListener{
 			case Sensor.TYPE_PRESSURE:writePressureData(event);break;
 			case Sensor.TYPE_PROXIMITY:writeProximityData(event);break;
 			case Sensor.TYPE_TEMPERATURE:writeTemperatureData(event);break;
+			default:
+				mWiiConnection.write("Type='TYPE_UNKNOWN' ");
+				writeGenericValues(event);
+				break;
 		}
 		mWiiConnection.write("/>\n");
 	}

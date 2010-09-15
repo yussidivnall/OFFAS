@@ -1,0 +1,7 @@
+Bugs:
+- The Socket implementation is very (very) bad, if the listening side hangs, the app freezes, so avoid closing the listener first
+- The Orientation should be done using the new (non deprecated) method
+- When disconnecting when not actually connected the app freezes or throws an Exception
+
+To do:
+- Use Threading on WiiConnection and handle socket close

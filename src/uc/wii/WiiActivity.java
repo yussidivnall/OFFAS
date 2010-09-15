@@ -56,7 +56,7 @@ public class WiiActivity extends Activity {
     	Toast.makeText(this,"stopService()...",Toast.LENGTH_LONG).show();
     	//Intent intent = new Intent();
     	//wiiServiceIntent.setAction("uc.wii.WiiService");
-    	stopService(wiiServiceIntent);
+    	stopService(new Intent(this,WiiService.class));
     	//mWiiService.stop();
     }
 }

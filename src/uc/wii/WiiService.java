@@ -23,13 +23,13 @@ public class WiiService extends Service {
 	}
 	@Override
 	public void onDestroy(){
-		super.onDestroy();
 		try{
-			mWiiConnection.close();
 			mSensorManager.unregisterListener(mWiiSensors);
-		}catch(IOException ioe){
+			mWiiConnection.close();
+		}catch(Exception ioe){
 			Toast.makeText(this,ioe.getLocalizedMessage(),Toast.LENGTH_LONG);
 		}
+		super.onDestroy();
 	}
 	@Override
 	public IBinder onBind(Intent arg0) {

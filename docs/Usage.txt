@@ -1,0 +1,28 @@
+Usage:
+Currently there isn't yet any listening application that uses OFFAS, 
+if you want to implement whatever functionality it's up to you.
+Linux:
+	netcat -lp 234
+	Start OFFAS on your Android device (for the time being the application is called wii on your phone)
+	set the address (and port) to the listening machine's address
+	press connect and wait for the "connected" message to appear.
+	
+Windows:
+	got to debian.org (or your favourite distro's page) and follow installation instructions.
+	see above.
+	
+MacOSX: I have no idea
+
+Other UNIXes: I'm not sure but probably pretty much the same as linux
+
+On a rooted phone:
+	requires: debian or just netcat
+	install netcat
+	open a terminal and start netcat -lp 234
+	same as Linux only with 127.0.0.1 as the address
+On a rooted phone through usb cable:
+	This is a dirty hack, but on the PC start: 
+	#adb shell "nc -lp 234"
+	or through debian
+	#adb shell "WHATEVERT YOU USE TO CHROOT TO DEBIAN + nc -lp 234"
+	
