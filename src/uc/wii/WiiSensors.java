@@ -7,13 +7,14 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 //@NOTE - I'm not sure what's he best way about all this, documentation says
 //that for Orientation Sensor onSensorChange(...) is deprecated, and this needs to be done 
 //through SensorManager.getInclination(), getOrientation() and getRotationMatrix()
 //But for now it works and it saves me implementing all of this through 
 //two interfaces(One for Orientation, and one through onSensorChanged() for all other sensors)
 //So in conclusion...
-//@TODO add (proper) interface for Orientation, I guess on a timer base
+//TODO add (proper) interface for Orientation, I guess on a timer base
 //http://developer.android.com/reference/android/hardware/Sensor.html#TYPE_ORIENTATION
 
 public class WiiSensors implements SensorEventListener{
@@ -107,7 +108,9 @@ public class WiiSensors implements SensorEventListener{
 		try{
 			outputSensorEvent(event);	
 		}catch(IOException ioe){
-			
+			Log.w("onSensorChanger()",ioe.getMessage());
+			mWiiConnection.close();
+			// TODO inform WiiService to alert user of disconnection
 		}
 	}
 }

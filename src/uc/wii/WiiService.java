@@ -9,6 +9,7 @@ import android.hardware.SensorManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 public class WiiService extends Service {
@@ -24,10 +25,11 @@ public class WiiService extends Service {
 	@Override
 	public void onDestroy(){
 		try{
+			if(mWiiConnection!=null)mWiiConnection.close();
 			mSensorManager.unregisterListener(mWiiSensors);
-			mWiiConnection.close();
 		}catch(Exception ioe){
-			Toast.makeText(this,ioe.getLocalizedMessage(),Toast.LENGTH_LONG);
+			alert(ioe.getMessage());
+			Log.w("onDestroy()",ioe.getMessage());
 		}
 		super.onDestroy();
 	}
@@ -45,18 +47,21 @@ public class WiiService extends Service {
 			if(address!="" && port>1){
 				if(mWiiConnection!=null){
 						mWiiConnection.close();
-						Toast.makeText(this,"Closed old connection",Toast.LENGTH_LONG).show();
+						alert("Closed old connectionm");
 				}
-				Toast.makeText(this,"Connecting"+address+":"+port,Toast.LENGTH_LONG).show();
+				alert("Connecting to "+address+":"+port);
 				mWiiConnection = new WiiConnection(address,port,false);
 				mWiiConnection.write("<?xml version='1.0' encoding='UTF-8'?>\n");
 				Toast.makeText(this,"Connected",Toast.LENGTH_SHORT).show();
 				mWiiSensors=new WiiSensors(mWiiConnection,mSensorManager);
 			}
 		}catch(IOException ioe){
-			Toast.makeText(this,ioe.getLocalizedMessage(),Toast.LENGTH_LONG);
-			//Toast.makeText(this,"Could not connect",Toast.LENGTH_LONG);
+			alert(ioe.getMessage());
+			Log.w("onStartCommand()","error:"+ioe.getMessage());
 		}
 		return Service.START_STICKY;
+	}
+	public void alert(String msg){
+		Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
 	}
 }
