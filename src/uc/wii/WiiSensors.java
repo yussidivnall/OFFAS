@@ -2,7 +2,6 @@ package uc.wii;
 
 import java.io.IOException;
 import java.util.List;
-
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -14,17 +13,20 @@ import android.util.Log;
 //But for now it works and it saves me implementing all of this through 
 //two interfaces(One for Orientation, and one through onSensorChanged() for all other sensors)
 //So in conclusion...
-//TODO add (proper) interface for Orientation, I guess on a timer base
+//@ TODO add (proper) interface for Orientation, I guess on a timer base
 //http://developer.android.com/reference/android/hardware/Sensor.html#TYPE_ORIENTATION
 
-public class WiiSensors implements SensorEventListener{
+public class WiiSensors extends Thread implements SensorEventListener{
 	WiiConnection mWiiConnection=null;
 	SensorManager mSensorManager;
+	WiiService mWiiService;
 	
-	public WiiSensors(WiiConnection wc,SensorManager sm) {
+	public WiiSensors(WiiConnection wc,SensorManager sm,WiiService ws) {
 		mWiiConnection=wc;
 		mSensorManager = sm;
+		mWiiService=ws;
 		initSensors();
+		this.start();
 	}
 	public void initSensors(){
 		List <Sensor>sensorList=mSensorManager.getSensorList(Sensor.TYPE_ALL);
@@ -108,8 +110,11 @@ public class WiiSensors implements SensorEventListener{
 		try{
 			outputSensorEvent(event);	
 		}catch(IOException ioe){
-			Log.w("onSensorChanger()",ioe.getMessage());
-			mWiiConnection.close();
+			Log.w("onSensorChanged()",ioe.getMessage());
+			
+			mWiiService.alert(ioe.getMessage());
+			//mWiiConnection.close();
+			mWiiService.stop();
 			// TODO inform WiiService to alert user of disconnection
 		}
 	}

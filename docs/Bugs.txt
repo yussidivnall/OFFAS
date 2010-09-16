@@ -1,7 +1,15 @@
 Bugs:
-- The Socket implementation is very (very) bad, if the listening side hangs, the app freezes, so avoid closing the listener first
+- The Socket implementation is very (very) bad, if the listening side hangs, the app freezes, so avoid closing the listener first - solved
 - The Orientation should be done using the new (non deprecated) method
-- When disconnecting when not actually connected the app freezes or throws an Exception
+- When disconnecting when not actually connected the app freezes or throws an Exception - solved
 
 To do:
-- Use Threading on WiiConnection and handle socket close
+- Use Threading on WiiConnection and handle socket close - done
+- Make WiiSensors handle remote end close more gracefully
+- Add SSL option
+- Add output options (timestamp, selectable sensors, writeGenericValues() option etc
+- Make a nice menu
+- Make a logo
+- Change project name from wii to OFFAS
+- Make a simple web-page
+- Make some implementing applications

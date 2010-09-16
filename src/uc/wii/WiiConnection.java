@@ -4,8 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 import android.util.Log;
-//@Bugs - Unexpected crash when other side hangs
-//@ToDo implement SSL
+//@ TODO implement SSL
 public class WiiConnection extends Thread{
 	private boolean SSL;
 	private Socket sock;
@@ -26,23 +25,14 @@ public class WiiConnection extends Thread{
 			Log.d("run()","Started run()");
 			if(!SSL){
 				Log.d("run()","Non SSL run cluase");
-				int c=0;
-				if(sock.isClosed()||!sock.isConnected()|| sock.isInputShutdown()||!sock.isBound()||sock.isOutputShutdown())done=true;
-				//while((c=sock.getInputStream().read())!=-1 && !done){
 				while(!done){
-					//c=sock.getInputStream().read();
-					//if(c==-1)done=true;
-					//Log.d("run()","Non SSL run loop");
-					//sock.close();
 					if(sock.isClosed()||!sock.isConnected()|| sock.isInputShutdown()||!sock.isBound()||sock.isOutputShutdown())done=true;
 				}
 				Log.d("run()","Quiting");
 				sock.close();
-				
 			}
-			//close();
 		}catch(Exception ioe){
-			Log.e("!!!!run()!!!!","Run Error:"+ioe.getMessage());
+			Log.e("run()","Run Error:"+ioe.getMessage());
 		}
 	}
 	

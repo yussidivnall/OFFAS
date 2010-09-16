@@ -1,12 +1,11 @@
 package uc.wii;
 
 import java.io.IOException;
-import java.net.Socket;
+
 
 import android.app.Service;
 import android.content.Intent;
 import android.hardware.SensorManager;
-import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -24,14 +23,15 @@ public class WiiService extends Service {
 	}
 	@Override
 	public void onDestroy(){
+		super.onDestroy();
 		try{
-			if(mWiiConnection!=null)mWiiConnection.close();
+			alert("Destroying service");
 			mSensorManager.unregisterListener(mWiiSensors);
+			if(mWiiConnection!=null)mWiiConnection.close();
 		}catch(Exception ioe){
 			alert(ioe.getMessage());
 			Log.w("onDestroy()",ioe.getMessage());
 		}
-		super.onDestroy();
 	}
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -53,7 +53,7 @@ public class WiiService extends Service {
 				mWiiConnection = new WiiConnection(address,port,false);
 				mWiiConnection.write("<?xml version='1.0' encoding='UTF-8'?>\n");
 				Toast.makeText(this,"Connected",Toast.LENGTH_SHORT).show();
-				mWiiSensors=new WiiSensors(mWiiConnection,mSensorManager);
+				mWiiSensors=new WiiSensors(mWiiConnection,mSensorManager,this);
 			}
 		}catch(IOException ioe){
 			alert(ioe.getMessage());
@@ -63,5 +63,8 @@ public class WiiService extends Service {
 	}
 	public void alert(String msg){
 		Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
+	}
+	public void stop(){
+		stopSelf();
 	}
 }
