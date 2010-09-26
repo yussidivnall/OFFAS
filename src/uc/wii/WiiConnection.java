@@ -9,7 +9,6 @@ import java.util.List;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
-import android.hardware.SensorManager;
 import android.util.Log;
 //@ TODO implement SSL
 public class WiiConnection extends Thread{
@@ -55,7 +54,10 @@ public class WiiConnection extends Thread{
 	}
 	
 	public void write(String data) throws IOException{
-			if(!SSL)sock.getOutputStream().write(data.getBytes());
+			if(!SSL){
+				//if(sock.isClosed())return;
+				sock.getOutputStream().write(data.getBytes());
+			}
 	}
 	public void writeSensorEvent(SensorEvent se) throws JSONException, IOException{
 		write(mWiiProtocolHandler.sensorEvent(se));
@@ -68,7 +70,8 @@ public class WiiConnection extends Thread{
 		done=true;
 		Log.d("close()","Closing socket");
 	}
-	public void writeOrientation(SensorManager sm) throws IOException {
-		write(mWiiProtocolHandler.orientation(sm));
+	
+	public void writeRotation(float[] acceleration, float[] gravity) throws IOException {
+		write(mWiiProtocolHandler.rotation(acceleration,gravity));
 	}
 }

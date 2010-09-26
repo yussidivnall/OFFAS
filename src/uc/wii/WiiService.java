@@ -65,7 +65,7 @@ public class WiiService extends Service {
 		Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
 	}
 	public void stop(){
-		stopSelf();
+		super.stopSelf();
 	}
 
 }

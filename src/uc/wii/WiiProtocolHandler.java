@@ -29,9 +29,19 @@ public class WiiProtocolHandler {
 	public final String SENSOR_TAG="Sensor";
 	public final String SENSOR_NAME_TAG="SensorName";
 	public final String SENSOR_TYPE_TAG="SensorType";
+	public final String ROTATION_TAG="Rotation";
+	public final String INCLINATION_TAG="Inclination";
 	public final String ORIENTATION_TAG="Orientation";
+		public final String AZIMUTH_TAG="Azimuth";
+		public final String PITCH_TAG="Pitch";
+		public final String ROLL_TAG="Roll";
 	
-	
+	public float[] mGravity = new float[3];
+	public float[] mGeomagnetic = new float[3];
+	public float[] mRotationMatrix = new float[9];
+	public float[] mInclinationMatrix= new float[9];
+	public float mInclination;
+	public float[] mOrientation = new float[3]; //[0]Azimuth,[1]Pitch,[2]Roll
 	
 	public WiiProtocolHandler(){}
 	
@@ -41,7 +51,12 @@ public class WiiProtocolHandler {
 		JSONObject jo = new JSONObject();
 		jo.put("sensor_name",se.sensor.getName());
 		jo.put("sensor_type",se.sensor.getType());
-		jo.put("values",se.values);
+		jo.put("values",se.values); //TODO fix this, at the moment only output reference to array
+		//TODO put these values
+		if(WiiOptions.output_rotation){}
+		if(WiiOptions.output_orientation){}
+		if(WiiOptions.output_inclination){}
+		
 		return jo.toString();
 	}
 	public String serializeSensorEventToXML(SensorEvent se){return null;}
@@ -63,6 +78,26 @@ public class WiiProtocolHandler {
 	}
 	
 	public String sensorEvent(SensorEvent se) throws JSONException{
+		if(WiiOptions.output_rotation||WiiOptions.output_inclination||WiiOptions.output_orientation){
+			if(se.sensor.getType()==Sensor.TYPE_ACCELEROMETER)mGravity=se.values;		
+			if(se.sensor.getType()==Sensor.TYPE_MAGNETIC_FIELD)mGeomagnetic=se.values;
+			if(mGravity!=null && mGeomagnetic!=null){
+				if(!SensorManager.getRotationMatrix(mRotationMatrix,mInclinationMatrix,mGravity,mGeomagnetic)){
+					//COULD NOW COMPUTE ROTATION MATRIX (IN FREE FALL?) NOW WHAT?
+					Log.d("NO ROTATION MATRIX","NO ROTATION_MATRIX");
+				}else{
+					//for (float i:mRotationMatrix){
+					//	Log.i("RotationMatrix",""+i);
+					//}
+					
+					//Fails - Throws a null pointer exception why?
+					if(WiiOptions.output_inclination)mInclination=SensorManager.getInclination(mInclinationMatrix);
+					if(WiiOptions.output_orientation)SensorManager.getOrientation(mRotationMatrix,mOrientation);
+					
+				}
+			}
+		}
+		
 		String ret=XML_HEADER;
 		ret+=tag(SENSOR_EVENT_TAG)+"\n";
 		if(WiiOptions.output_json)ret+=TagValue(JSON_TAG,serializeSensorEventToJSON(se))+"\n";
@@ -130,19 +165,18 @@ public class WiiProtocolHandler {
 		ret+=endTag(CONNECTION_HEADER_TAG)+"\n";
 		return ret;
 	}
+	
 
-	public String orientation(SensorManager sm) {
+
+	public String rotation(float[] acceleration, float[] gravity) {
 		float R[] = new float[9]; //Rotation Matrix
 		float I[] = new float[9]; //Inclination Matrix
-		float gravity[] = new float[3]; // Gravity vector
-		float geomagnetic[] = new float[3];
-		SensorManager.getRotationMatrix(R,I,gravity,geomagnetic);
-		float orientation[]= new float[3];
-		orientation=SensorManager.getOrientation(R,orientation); // Is this silly?
-		float inclination=SensorManager.getInclination(I);
-
-		String ret=XML_HEADER;
-		
+		String ret="";
+		if(SensorManager.getRotationMatrix(R,I,gravity,acceleration)){
+			ret+=XML_HEADER;
+			ret+=tag(ROTATION_TAG);
+			ret+=endTag(ROTATION_TAG);
+		}
 		return ret;
 	}
 }
