@@ -11,6 +11,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,10 +50,15 @@ public class WiiProtocolHandler {
 	
 	public String serializeSensorEventToJSON(SensorEvent se) throws JSONException{
 		JSONObject jo = new JSONObject();
+		JSONArray values=new JSONArray();
 		jo.put("sensor_name",se.sensor.getName());
 		jo.put("sensor_type",se.sensor.getType());
-		jo.put("values",se.values); //TODO fix this, at the moment only output reference to array
-		//TODO put these values
+		for (double v:se.values){
+			values.put(v);
+		}
+		jo.put("values",values);
+		
+		//jo.accumulate("values",se.values);//TODO put these values
 		if(WiiOptions.output_rotation){}
 		if(WiiOptions.output_orientation){}
 		if(WiiOptions.output_inclination){}
@@ -97,7 +103,9 @@ public class WiiProtocolHandler {
 				}
 			}
 		}
-		
+		if(WiiOptions.output_raw_json){
+			return serializeSensorEventToJSON(se)+"\n";
+		}
 		String ret=XML_HEADER;
 		ret+=tag(SENSOR_EVENT_TAG)+"\n";
 		if(WiiOptions.output_json)ret+=TagValue(JSON_TAG,serializeSensorEventToJSON(se))+"\n";
@@ -152,6 +160,9 @@ public class WiiProtocolHandler {
 	}
 	
 	public String connectionHeader(List<Sensor> list){
+		if(WiiOptions.output_raw_json){
+			return ""; //Maybe output header in JSON instead?
+		}
 		String ret=XML_HEADER;
 		ret+=tag(CONNECTION_HEADER_TAG)+"\n";
 		ret+=tag(AVAILABLE_SENSORS_TAG)+"\n";

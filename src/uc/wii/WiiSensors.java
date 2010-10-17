@@ -23,7 +23,6 @@ public class WiiSensors extends Thread implements SensorEventListener{
 		mWiiService=ws;
 		initSensors();
 		this.start();
-
 	}
 	public void initSensors(){
 		try{

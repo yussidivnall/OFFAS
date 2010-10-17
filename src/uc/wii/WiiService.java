@@ -17,6 +17,7 @@ public class WiiService extends Service {
 	SensorManager mSensorManager;
 	
 	@Override
+	
 	public void onCreate(){
 		super.onCreate();
 		mSensorManager=(SensorManager)getSystemService(SENSOR_SERVICE);
@@ -47,11 +48,11 @@ public class WiiService extends Service {
 			if(address!="" && port>1){
 				if(mWiiConnection!=null){
 						mWiiConnection.close();
-						alert("Closed old connectionm");
+						alert("Closed old connection");
 				}
 				alert("Connecting to "+address+":"+port);
 				mWiiConnection = new WiiConnection(address,port,false);
-				mWiiConnection.write("<?xml version='1.0' encoding='UTF-8'?>\n");
+				//mWiiConnection.write("<?xml version='1.0' encoding='UTF-8'?>\n");
 				Toast.makeText(this,"Connected",Toast.LENGTH_SHORT).show();
 				mWiiSensors=new WiiSensors(mWiiConnection,mSensorManager,this);
 			}
