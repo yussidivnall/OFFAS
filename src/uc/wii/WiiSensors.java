@@ -31,7 +31,7 @@ public class WiiSensors extends Thread implements SensorEventListener{
 			mWiiConnection.writeConnectionHeader(sensorList);
 			for (Sensor s:sensorList){
 				//TODO And configurable SENSOR_DELAY for each sensor type
-				mSensorManager.registerListener(this,s,SensorManager.SENSOR_DELAY_NORMAL);
+				mSensorManager.registerListener(this,s,WiiOptions.DefaultSensorDelay);
 			}
 		}catch(IOException ioe){
 			Log.d("InitSensors",ioe.getMessage());

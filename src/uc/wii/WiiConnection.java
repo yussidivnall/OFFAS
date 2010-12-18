@@ -45,15 +45,17 @@ public class WiiConnection extends Thread{
 					//}
 				}
 				Log.d("run()","Quiting");
-				mWiiProtocolHandler=null;
+				//mWiiProtocolHandler=null;
 				sock.close();
 			}
 		}catch(Exception ioe){
 			Log.e("run()","Run Error:"+ioe.getMessage());
+		}finally{
+			
 		}
 	}
 	
-	public void write(String data) throws IOException{
+	public void write(String data) throws IOException,NullPointerException{
 			if(!SSL){
 				//if(sock.isClosed())return;
 				sock.getOutputStream().write(data.getBytes());

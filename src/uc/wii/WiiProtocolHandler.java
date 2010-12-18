@@ -43,7 +43,23 @@ public class WiiProtocolHandler {
 	public float[] mInclinationMatrix= new float[9];
 	public float mInclination;
 	public float[] mOrientation = new float[3]; //[0]Azimuth,[1]Pitch,[2]Roll
-	
+	//Returns a multidimentional JSON array
+	//Params values[],rows,columns
+	//Return JSONArray()
+	//
+	public JSONArray getJSONMatrix(float values[],int rows, int columns)throws JSONException{
+		JSONArray ret=new JSONArray();
+		if(values.length!=rows*columns){return null;}
+		for(int r=0;r<rows;r++){
+			JSONArray row=new JSONArray();
+			for (int c=0;c<columns;c++){
+				double value=values[r+c];
+				row.put(value);
+			}
+			ret.put(row);
+		}
+		return ret;
+	}
 	public WiiProtocolHandler(){}
 	
 	public String serializeSensorEventToPython(SensorEvent se){return null;}
@@ -51,6 +67,8 @@ public class WiiProtocolHandler {
 	public String serializeSensorEventToJSON(SensorEvent se) throws JSONException{
 		JSONObject jo = new JSONObject();
 		JSONArray values=new JSONArray();
+		
+		if(WiiOptions.time_stamp)jo.put("time", new java.util.Date().getTime());
 		jo.put("sensor_name",se.sensor.getName());
 		jo.put("sensor_type",se.sensor.getType());
 		for (double v:se.values){
@@ -59,9 +77,21 @@ public class WiiProtocolHandler {
 		jo.put("values",values);
 		
 		//jo.accumulate("values",se.values);//TODO put these values
-		if(WiiOptions.output_rotation){}
-		if(WiiOptions.output_orientation){}
-		if(WiiOptions.output_inclination){}
+		if(WiiOptions.output_rotation){
+			JSONArray rotation=getJSONMatrix(mRotationMatrix,3,3);
+			jo.put("rotation_matrix", rotation);
+		}
+		if(WiiOptions.output_orientation){
+			JSONArray orientation=new JSONArray();
+			for (float v : mOrientation){
+				orientation.put(v);
+			}
+			jo.put("orientation_matrix",orientation);
+		}
+		if(WiiOptions.output_inclination){
+			JSONArray inclination = getJSONMatrix((float[])mInclinationMatrix,3,3);
+			jo.put("inclination_matrix", inclination);
+		}
 		
 		return jo.toString();
 	}
@@ -104,16 +134,17 @@ public class WiiProtocolHandler {
 			}
 		}
 		if(WiiOptions.output_raw_json){
-			return serializeSensorEventToJSON(se)+"\n";
+			return serializeSensorEventToJSON(se);
 		}
 		String ret=XML_HEADER;
 		ret+=tag(SENSOR_EVENT_TAG)+"\n";
-		if(WiiOptions.output_json)ret+=TagValue(JSON_TAG,serializeSensorEventToJSON(se))+"\n";
+		if(WiiOptions.output_json)ret+=TagValue(JSON_TAG,serializeSensorEventToJSON(se));
 		//TODO
 		//if(WiiOptions.output_python)ret+=TagValue(JSON_TAG,serializeSensorEventToPython(se))+"\n";
 		//if(WiiOptions.output_xml)ret+=TagValue(JSON_TAG,serializeSensorEventToXML(se))+"\n";
 		ret+=endTag(SENSOR_EVENT_TAG);
-		return ret+"\n";
+		//return ret+"\n";
+		return ret;
 	}
 	
 	public void parseRequest(XmlPullParser xpp) throws XmlPullParserException, IOException{

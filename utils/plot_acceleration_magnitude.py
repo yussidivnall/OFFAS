@@ -6,7 +6,7 @@ import Gnuplot,Gnuplot.funcutils;
 from numpy import *;
 
 port=234
-plot_options='set style fill solid; set style lines 10'
+plot_options='set style fill solid; set style lines 10;set style data linespoints'
 
 
 
@@ -29,9 +29,10 @@ def update_graph(json_obj):
 		xt=[json_obj["values"][0]]
         	yt=[json_obj["values"][1]]
 	        zt=[json_obj["values"][2]]
-		mag=math.sqrt(xt[0]*xt[0]+yt[0]*yt[0]+zt[0]*zt[0])-9.81;
+		time=json_obj["time"]
+		mag=math.sqrt(xt[0]*xt[0]+yt[0]*yt[0]+zt[0]*zt[0])-9.74;
 		data_points.append(mag)
-		#data_points=data_points+mag
+		#data_points=data_points+[time,mag]
 		
 
 		if(len(data_points)>max_points): #too many points trucating
