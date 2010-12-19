@@ -6,14 +6,15 @@ import Gnuplot,Gnuplot.funcutils;
 from numpy import *;
 
 port=234
-plot_options='set style fill solid; set style lines 10;set style data linespoints'
+plot_options='set style fill solid; set style lines 10;set style data linespoints; set title "acceleration time graph";set xlabel "time"; set ylabel "acceleration"; set terminal x10 0xff0000'
 
 
 
 data_points=[];
+
 g=Gnuplot.Gnuplot(debug=1)
 max_points=200
-
+start_time=-1
 def set_plot_options():
 	global plot_options
 	g(plot_options);
@@ -22,19 +23,16 @@ def update_graph(json_obj):
 	global g
         global data_points;
 	global mat_points;
-	if(json_obj["sensor_type"]==1):
-		#AK8976A 3-axis Accelerometer
-		print""
-		
+	global start_time;
+	if(json_obj["sensor_type"]==1):  #AK8976A 3-axis Accelerometer
 		xt=[json_obj["values"][0]]
         	yt=[json_obj["values"][1]]
 	        zt=[json_obj["values"][2]]
 		time=json_obj["time"]
-		mag=math.sqrt(xt[0]*xt[0]+yt[0]*yt[0]+zt[0]*zt[0])-9.74;
+		if(start_time==-1): start_time=time
+		time=time-start_time
+		mag=[time,math.sqrt(xt[0]*xt[0]+yt[0]*yt[0]+zt[0]*zt[0])-9.74]
 		data_points.append(mag)
-		#data_points=data_points+[time,mag]
-		
-
 		if(len(data_points)>max_points): #too many points trucating
 			buff=[]
 			buff=data_points[len(data_points)-max_points:len(data_points)]
