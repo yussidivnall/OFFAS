@@ -6,4 +6,7 @@
     <string name="port">234</string>
     <string name="start">connect</string>
     <string name="stop">disconnect</string>
+	<string name="title">Open Functionality For Android \'s Sensors</string>
+<string name="settings">Settings</string>
+
 </resources>

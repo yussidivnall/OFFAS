@@ -10,14 +10,15 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
-
+/*
+ * Starting point when running as a service
+ */
 public class WiiService extends Service {
 	WiiConnection mWiiConnection;
 	WiiSensors mWiiSensors;
 	SensorManager mSensorManager;
 	
 	@Override
-	
 	public void onCreate(){
 		super.onCreate();
 		mSensorManager=(SensorManager)getSystemService(SENSOR_SERVICE);
@@ -52,8 +53,7 @@ public class WiiService extends Service {
 				}
 				alert("Connecting to "+address+":"+port);
 				mWiiConnection = new WiiConnection(address,port,false);
-				//mWiiConnection.write("<?xml version='1.0' encoding='UTF-8'?>\n");
-				Toast.makeText(this,"Connected",Toast.LENGTH_SHORT).show();
+				alert("Connected");
 				mWiiSensors=new WiiSensors(mWiiConnection,mSensorManager,this);
 			}
 		}catch(IOException ioe){

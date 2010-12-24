@@ -1,6 +1,6 @@
 OFfA- Orientation Functionality for Android
 
-A simple interface for Android's Sensors, uses sensor events and writes them as xml to a socket, to be used by other application, can be used to override the mouse, or through Blender python or an array of other application
+A simple interface for Android's Sensors, uses sensor events and writes them as json to a socket, to be used by other application, can be used to override the mouse, or through Blender python or an array of other application
 
 At the moment only orientation is implemented, and it uses an officialy deprecated but still usable onSensorChange().
 

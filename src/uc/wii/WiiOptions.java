@@ -3,6 +3,9 @@ package uc.wii;
 import android.hardware.SensorManager;
 
 public class WiiOptions {
+	public static boolean run_as_service=true;
+	
+	
 	public static boolean time_stamp=true;
 	
 	public static boolean output_json=true;
