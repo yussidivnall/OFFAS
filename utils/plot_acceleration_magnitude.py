@@ -6,7 +6,7 @@ import Gnuplot,Gnuplot.funcutils;
 from numpy import *;
 
 port=234
-plot_options='set style fill solid; set style lines 10;set style data linespoints; set title "acceleration time graph";set xlabel "time"; set ylabel "acceleration"; set terminal x10 0xff0000'
+plot_options='set style fill solid; set style lines 10;set style data linespoints; set title "acceleration time graph";set xlabel "time"; set ylabel "acceleration";'
 
 
 
