@@ -1,0 +1,20 @@
+----------------------------------------------
+OFFAS - Open Functionality For Android's Sensors
+Author: Yussi Divnal (UC.dev.null@Gmail.com)
+Project Page: https://github.com/yussidivnall/OFFAS
+----------------------------------------------
+
+description:
+A simple android app to take the sensor data, 
+encapsulate it to JSON (Javascript tables) 
+and send it to a given address.
+
+usage:
+install the app on any given Android device
+run, specify an address and port and connect
+
+server side:
+on the server side you need to have a listening service on the given port (default 234).
+in the project's root, under utils there are a few examples to utilize this (https://github.com/yussidivnall/OFFAS/tree/master/utils).
+those use gnuplot, with gunplot.py which you can grub here: http://gnuplot-py.sourceforge.net/
+OFFAS isn't limited to this, and can be used to do anything you can think of doing with the sensors.

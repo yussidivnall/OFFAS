@@ -76,6 +76,7 @@ public class WiiActivity extends Activity {
     	SharedPreferences.Editor editor = preferences.edit();
     	editor.putString("address", ((EditText)findViewById(R.id.AddressEditText)).getText().toString());
     	editor.putString("port", ((EditText)findViewById(R.id.PortEditText)).getText().toString());
+    	
     	editor.commit();
     }
     @Override

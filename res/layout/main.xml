@@ -10,6 +10,7 @@
 <FrameLayout android:id="@+id/FrameLayout01" android:layout_height="wrap_content" android:layout_width="fill_parent">
 	<EditText android:text="@string/local_host" android:id="@+id/AddressEditText" android:layout_height="wrap_content" android:layout_width="wrap_content"></EditText>
 	<EditText android:text="@string/port" android:id="@+id/PortEditText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="right"></EditText>
+	<ListView android:id="@+id/ListView01" android:layout_height="fill_parent" android:layout_width="fill_parent"></ListView>
 </FrameLayout>
 
 <FrameLayout android:id="@+id/FrameLayout02" android:layout_width="fill_parent" android:orientation="vertical" android:addStatesFromChildren="true" android:layout_gravity="bottom" android:layout_height="fill_parent">
