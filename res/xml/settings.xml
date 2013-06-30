@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+<PreferenceCategory><EditTextPreference android:title="Address" android:summary="Address to connect to" android:key="address" android:defaultValue="192.168.1.1"></EditTextPreference>
+<EditTextPreference android:title="Port" android:summary="port on the address (must be listening)" android:key="port" android:defaultValue="234"></EditTextPreference>
+</PreferenceCategory><PreferenceCategory>
+
+<ListPreference android:entries="@array/sensor_delay" android:entryValues="@array/sensor_delay" android:title="Delay" android:key="sensor_delay" android:summary="Sensor update time" android:defaultValue="1"></ListPreference>
+</PreferenceCategory>
+
+</PreferenceScreen>

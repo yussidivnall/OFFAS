@@ -5,54 +5,50 @@ import java.io.InputStreamReader;
 
 import org.json.JSONException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.util.Log;
 //@ TODO implement SSL
-public class WiiConnection extends Thread{
+public class WiiConnection {
+	//public String connection_state="uninitilized";
+	
+	
+	private String mAddress;
+	private int mPort;
 	private boolean SSL;
 	private Socket sock;
-	private boolean done=false;
+	public boolean done=false;
 	public WiiProtocolHandler mWiiProtocolHandler;
 	
 	public WiiConnection(String address,int port,boolean ssl) throws IOException{
 			SSL=ssl;
+			mAddress=address;
+			mPort=port;	
 			mWiiProtocolHandler=new WiiProtocolHandler();
-			if(!SSL){
-				Log.d("WiiConnection","Starting a nonSSL socket thread");
-				sock=new Socket(address,port);
-				sock.setKeepAlive(true);
-				sock.setSoTimeout(30);
-				this.start();
-			}
-	}
-	public void run(){
-		try{
-			Log.d("run()","Started run()");
-			if(!SSL){
-				Log.d("run()","Non SSL run cluase");
-				while(!done){
-					if(sock.isClosed()||!sock.isConnected()|| sock.isInputShutdown()||!sock.isBound()||sock.isOutputShutdown())done=true;
-					
-					if(new InputStreamReader(sock.getInputStream()).ready()){
-						mWiiProtocolHandler.parseInput(sock.getInputStream());
-					}
-					//if(sock.getInputStream().available()>=1){
-					//	Log.d("Something to read","Hey");
-					//	mWiiProtocolHandler.parseInput(sock.getInputStream());
-					//}
-				}
-				Log.d("run()","Quiting");
-				//mWiiProtocolHandler=null;
-				sock.close();
-			}
-		}catch(Exception ioe){
-			Log.e("run()","Run Error:"+ioe.getMessage());
-		}finally{
 			
-		}
+			initSock();
+			//this.start();
+			
+	}
+	public void initSock() throws IOException{
+			if(!SSL){
+				//connection_state="CONNECTING";
+				Log.d("WiiConnection","Starting a nonSSL socket thread");
+				sock=new Socket(mAddress,mPort);
+				sock.setKeepAlive(true);
+				sock.setSoTimeout(30);	
+			}
+
+		
+	}
+	
+	
+	public void run(){
+		Log.d("run()","Started run()");
+		//initSock();
 	}
 	
 	public void write(String data) throws IOException,NullPointerException{
@@ -62,18 +58,29 @@ public class WiiConnection extends Thread{
 			}
 	}
 	public void writeSensorEvent(SensorEvent se) throws JSONException, IOException{
+		//Log.d("writeSensorEvent", "writing");
 		write(mWiiProtocolHandler.sensorEvent(se));
 	}
 	public void writeConnectionHeader(List<Sensor> list) throws IOException{
+		
 		write(mWiiProtocolHandler.connectionHeader(list));
 	}
 	
 	public void close(){
 		done=true;
+		try {
+			sock.close();
+		} catch (IOException ioe) {
+			// TODO Auto-generated catch block
+			Log.d("WiiConnection.close", ioe.getLocalizedMessage());
+		} catch (Exception e){
+			Log.d("WiiConnection.close - Exception", e.getLocalizedMessage());
+		}
 		Log.d("close()","Closing socket");
 	}
-	
+	/*
 	public void writeRotation(float[] acceleration, float[] gravity) throws IOException {
 		write(mWiiProtocolHandler.rotation(acceleration,gravity));
 	}
+	*/
 }

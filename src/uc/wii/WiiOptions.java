@@ -17,5 +17,6 @@ public class WiiOptions {
 	public static boolean output_raw_json=true;
 	public static int orientation_timer=500; 
 	
+	
 	public static int DefaultSensorDelay=SensorManager.SENSOR_DELAY_NORMAL;
 }

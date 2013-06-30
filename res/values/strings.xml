@@ -9,4 +9,9 @@
 	<string name="title">Open Functionality For Android \'s Sensors</string>
 <string name="settings">Settings</string>
 
+<string-array name="sensor_delay"><item>fastest</item>
+<item>game</item>
+<item>ui</item>
+<item>normal</item>
+</string-array>
 </resources>

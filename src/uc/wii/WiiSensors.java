@@ -12,7 +12,7 @@ import android.hardware.SensorManager;
 import android.util.Log;
 
 
-public class WiiSensors extends Thread implements SensorEventListener{
+public class WiiSensors implements SensorEventListener{
 	WiiConnection mWiiConnection=null;
 	SensorManager mSensorManager;
 	WiiService mWiiService;
@@ -22,20 +22,25 @@ public class WiiSensors extends Thread implements SensorEventListener{
 		mSensorManager = sm;
 		mWiiService=ws;
 		initSensors();
-		this.start();
+		//this.start();
 	}
 	public void initSensors(){
 		try{
+			//mWiiService.alert("Init Sensors");
 			//TODO Make this configurable, probably will slow it down too much to have useless sensor data
 			List <Sensor>sensorList=mSensorManager.getSensorList(Sensor.TYPE_ALL);
+			//mWiiService.alert("Init Sensors - got Sensor list");
+			
 			mWiiConnection.writeConnectionHeader(sensorList);
+			//mWiiService.alert("Init Sensors - Wrote Connection Header");
 			for (Sensor s:sensorList){
 				//TODO And configurable SENSOR_DELAY for each sensor type
 				mSensorManager.registerListener(this,s,WiiOptions.DefaultSensorDelay);
 			}
-		}catch(IOException ioe){
+			//mWiiService.alert("Init Sensors - done");
+		}catch(Exception ioe){
 			Log.d("InitSensors",ioe.getMessage());
-			mWiiService.alert(ioe.getMessage());
+			mWiiService.alert("initSensors()"+ioe.getMessage());
 		}
 	}
 	
@@ -45,7 +50,8 @@ public class WiiSensors extends Thread implements SensorEventListener{
 	}
 		
 	public void onSensorChanged(SensorEvent event) {
-		try{		
+		try{
+			//Log.d("Sensor Changed","Sensor Changed");
 			mWiiConnection.writeSensorEvent(event);			
 		}catch(IOException ioe){
 			Log.w("onSensorChanged()",ioe.getMessage());
